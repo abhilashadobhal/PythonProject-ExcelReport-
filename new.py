@@ -4,11 +4,11 @@ from openpyxl import load_workbook
 from openpyxl.drawing.image import Image as OpenpyxlImage
 from openpyxl.styles import Font, Border, Side, Alignment
 
-# --- 1. Load CSV into pandas and Preprocess ---
+#  1. Load CSV into pandas and Preprocess ---
 df = pd.read_csv("Auto Sales data.csv")
 df['ORDERDATE'] = pd.to_datetime(df['ORDERDATE'], format='%d/%m/%Y')
 
-# --- 2. Generate Summary Stats (Step 6) ---
+#  2. Generate Summary Stats (Step 6) ---
 sales_stats = df['SALES'].agg(['count', 'mean', 'std', 'min', 'max', 'sum']).to_frame(name='SALES')
 # FIX: Explicitly cast to object/string type to avoid FutureWarning
 sales_stats['SALES'] = sales_stats['SALES'].astype(object)
@@ -18,7 +18,7 @@ for stat in ['mean', 'std', 'min', 'max', 'sum']:
     sales_stats.loc[stat, 'SALES'] = f"${sales_stats.loc[stat, 'SALES']:,.2f}"
 sales_stats.loc['count', 'SALES'] = f"{int(sales_stats.loc['count', 'SALES']):,}"
 
-# --- 3. Create Pivot Tables (Step 2) ---
+#  3. Create Pivot Tables (Step 2) ---
 
 # Pivot 1: Total Sales by PRODUCTLINE
 pivot_product_sales = df.pivot_table(
@@ -117,4 +117,5 @@ ws_summary.column_dimensions['B'].width = 18
 ws_country.column_dimensions['A'].width = 18
 
 wb.save(excel_file)
+
 print(f"Excel Report saved as {excel_file}")
